@@ -8,20 +8,19 @@ const {
 } = require("../../controllers/project/projects");
 
 const router = express.Router();
-
 // ✅ Create Project
-router.post("/create", createProject);
+router.route("/create").post(createProject);
 
 // ✅ Get All Projects
-router.get("/get/all", getAllProjects);
+router.route("/get/all").get(getAllProjects);
 
 // ✅ Get Single Project
-router.get("/get/single/:id", getSingleProject);
+router.route("/get/single/:id").get(getSingleProject);
 
 // ✅ Update Project
-router.put("/update/:id", updateProject);
+router.route("/update/:id").put(updateProject);
 
 // ✅ Delete Project
-router.delete("/delete/:id", deleteProject);
+router.route("/delete/:id").delete(deleteProject);
 
 module.exports = router;
