@@ -138,4 +138,18 @@ const getAllUsers = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-module.exports = { registerUser, loginUser, getAllUsers };
+
+const getSingleUsers = catchAsyncErrors(async (req, res, next) => {
+  const users = await User.findById(req.params.id).populate("teamId", "name email");
+
+  if (!users) {
+    return next(new ErrorHandler("Users not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+module.exports = { registerUser, loginUser, getAllUsers, getSingleUsers };
