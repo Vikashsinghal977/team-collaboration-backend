@@ -4,7 +4,7 @@ const ErrorHandler = require("../../utils/errorHandler");
 const { sendToken } = require("../../utils/jwtToken");
 
 const registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, password, confirmPassword } = req.body;
+  const { name, email, password, confirmPassword, teamId, role } = req.body;
 
   // --- Validation ---
   if (!name?.trim()) {
@@ -46,6 +46,8 @@ const registerUser = catchAsyncErrors(async (req, res, next) => {
       name,
       email,
       password,
+      teamId,
+      role,
       isVerified: false,
       isDeactivated: false,
     });
@@ -96,4 +98,44 @@ const loginUser = catchAsyncErrors(async (req, res, next) => {
 
 });
 
-module.exports = { registerUser, loginUser };
+
+// Get All Users (with pagination, search, filters)
+const getAllUsers = catchAsyncErrors(async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  let query = {};
+
+  // Search by name or description
+  if (req.query.field && req.query.text) {
+    const field = req.query.field;
+    query[field] = { $regex: req.query.text, $options: "i" };
+  }
+
+  // // Filter by adminId
+  if (req.query.teamId) {
+    query.teamId = req.query.teamId;
+  }
+
+  const sortValue = { createdAt: -1 };
+
+  const users = await User.find(query)
+    .populate("teamId", "name email")
+    .skip(skip)
+    .limit(limit)
+    .sort(sortValue);
+
+  const totalCount = await User.countDocuments(query);
+
+  res.status(200).json({
+    success: true,
+    totalPages: Math.ceil(totalCount / limit),
+    totalCount,
+    limit,
+    page,
+    users,
+  });
+});
+
+module.exports = { registerUser, loginUser, getAllUsers };

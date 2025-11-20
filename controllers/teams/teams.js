@@ -64,37 +64,37 @@ exports.getAllTeams = catchAsyncErrors(async (req, res, next) => {
 
 // ✅ Get Single Team
 exports.getSingleTeam = catchAsyncErrors(async (req, res, next) => {
-  const team = await Teams.findById(req.params.id).populate("adminId", "name email");
+  const teams = await Teams.findById(req.params.id).populate("adminId", "name email");
 
-  if (!team) {
+  if (!teams) {
     return next(new ErrorHandler("Team not found", 404));
   }
 
   res.status(200).json({
     success: true,
-    team,
+    teams,
   });
 });
 
 // ✅ Update Team
 exports.updateTeam = catchAsyncErrors(async (req, res, next) => {
-  const { name, description, adminId } = req.body;
+  const { name, description, adminId, active } = req.body;
 
-  let team = await Teams.findById(req.params.id);
-  if (!team) {
+  let teams = await Teams.findById(req.params.id);
+  if (!teams) {
     return next(new ErrorHandler("Team not found", 404));
   }
 
-  if (name !== undefined) team.name = name;
-  if (description !== undefined) team.description = description;
-  if (adminId !== undefined) team.adminId = adminId;
+  if (name !== undefined) teams.name = name;
+  if (description !== undefined) teams.description = description;
+  if (active!== null && active !== undefined) teams.active = active;
 
-  await team.save();
+  await teams.save();
 
   res.status(200).json({
     success: true,
     message: "Team updated successfully",
-    team,
+    teams,
   });
 });
 

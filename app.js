@@ -33,7 +33,7 @@ const messageRoutes = require("./routers/message/messages")
 
 
 // Api's
-app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/teams", teamsRoutes);
 app.use("/api/v1/projects", projectsRoutes);
 app.use("/api/v1/tasks", tasksRoutes);

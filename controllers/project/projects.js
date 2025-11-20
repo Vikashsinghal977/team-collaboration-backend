@@ -78,7 +78,7 @@ exports.getSingleProject = catchAsyncErrors(async (req, res, next) => {
 
 // ✅ Update Project
 exports.updateProject = catchAsyncErrors(async (req, res, next) => {
-  const { name, description, teamId } = req.body;
+  const { name, description, teamId, active } = req.body;
 
   let project = await Projects.findById(req.params.id);
   if (!project) {
@@ -87,6 +87,7 @@ exports.updateProject = catchAsyncErrors(async (req, res, next) => {
 
   if (name !== undefined) project.name = name;
   if (description !== undefined) project.description = description;
+  if (active!== null && active !== undefined) project.active = active;
   if (teamId !== undefined) project.teamId = teamId;
 
   await project.save();

@@ -7,6 +7,10 @@ const projectSchema = new mongoose.Schema({
     description: {
         type:String
     },
+    active: {
+        type: Boolean,
+        default: false
+    },
     teamId :{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Teams"

@@ -5,18 +5,18 @@ const { createTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam } = requi
 const router = express.Router();
 
 // ✅ Create Team
-router.post("/create", createTeam);
+router.route("/create").post(createTeam);
 
 // ✅ Get All Teams
-router.get("/get/all", getAllTeams);
+router.route("/get/all").get(getAllTeams);
 
 // ✅ Get Single Team
 router.get("/get/single/:id", getSingleTeam);
 
 // ✅ Update Team
-router.put("/update/:id", updateTeam);
+router.route("/update/:id").put(updateTeam);
 
 // ✅ Delete Team
-router.delete("/delete/:id", deleteTeam);
+router.route("/delete/:id").delete(deleteTeam);
 
 module.exports = router;
